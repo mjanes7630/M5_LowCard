@@ -57,10 +57,6 @@ public class M5_LowCard_Phase2 {
 }
 
 class CardTable extends JFrame {
-   public CardTable(String string, int nUM_CARDS_PER_HAND, int nUM_PLAYERS) {
-      // TODO Auto-generated constructor stub
-   }
-
    static int MAX_CARDS_PER_HAND = 56;
    static int MAX_PLAYERS = 2; 
 
@@ -68,4 +64,32 @@ class CardTable extends JFrame {
    private int numPlayers;
 
    public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea;
+   
+   // Constructor
+   CardTable(String title, int numCardsPerHand, int numPlayers) {
+      /*
+       * Instantiate the JFrame super class with its own parameterized
+       * constructor passing in the title
+       */
+      super(title);
+      
+      
+   }
+
+   // Accessors (Getters)
+   /**
+    * @return the number of cards per hand
+    */
+   public int getNumCardsPerHand()
+   {
+      return numCardsPerHand;
+   }
+
+   /**
+    * @return the number of players
+    */
+   public int getNumPlayers()
+   {
+      return numPlayers;
+   }
 }
