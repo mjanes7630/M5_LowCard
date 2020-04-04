@@ -12,6 +12,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import java.util.Random;
+
 public class M5_LowCard_Phase2 {
    static int NUM_CARDS_PER_HAND = 7;
    static int NUM_PLAYERS = 2;
@@ -27,6 +29,11 @@ public class M5_LowCard_Phase2 {
       CardTable myCardTable = new CardTable("CardTable", 
                                              NUM_CARDS_PER_HAND,
                                              NUM_PLAYERS);
+      // Test Print
+      CardTable marcosCardTable = new CardTable("CardTable", 
+            0,
+            NUM_PLAYERS);
+      System.out.println(marcosCardTable.getNumCardsPerHand());
       myCardTable.setSize(800, 600);
       myCardTable.setLocationRelativeTo(null);
       myCardTable.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,6 +79,18 @@ class CardTable extends JFrame {
        * constructor passing in the title
        */
       super(title);
+      
+      /*
+       * Filter input
+       */
+      if (numCardsPerHand < 1 || numCardsPerHand > MAX_CARDS_PER_HAND) {
+         int randomInt = new Random().nextInt(MAX_CARDS_PER_HAND) + 1;
+         // Pick some random amount of cards between 1 and MAX_CARDS_PER_HAND
+         this.numCardsPerHand = randomInt;
+      }
+      else {
+         this.numCardsPerHand = numCardsPerHand;
+      }
       
       
    }
