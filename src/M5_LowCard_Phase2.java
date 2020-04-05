@@ -22,8 +22,9 @@ public class M5_LowCard_Phase2 {
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText = new JLabel[NUM_PLAYERS];
+   
 
-   public static void main(String[] args) {
+   public static void main(String[] args) {      
       int k;
       Icon tempIcon;
       // establish main frame in which program will run
@@ -34,29 +35,106 @@ public class M5_LowCard_Phase2 {
       myCardTable.setLocationRelativeTo(null);
       myCardTable.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      // show everything to the user
-      myCardTable.setVisible(true);
-
-      /*
-       * CREATE LABELS ----------------------------------------------------
-       * code goes here ...
-       */
+      // create labels
+      playLabelText[0] = new JLabel("Computer", JLabel.CENTER);
+      playLabelText[1] = new JLabel("Player 1", JLabel.CENTER);   
       
-      /*
-       * ADD LABELS TO PANELS -----------------------------------------
-       * code goes here ...
-       */
-
-      /*and two random cards in the play region 
-       * (simulating a computer/human play)
-       * code goes here ...
-       */
-
+      for(int i = 0; i < NUM_CARDS_PER_HAND - 1; i ++) {
+         Card playerCard = randomCardGenerator();         
+                
+         computerLabels[i] = (new JLabel(GUICard.getBackCardIcon()));
+         humanLabels[i] = (new JLabel(GUICard.getIcon(playerCard)));
+         
+         // add labels to panels
+         myCardTable.pnlComputerHand.add(computerLabels[i]);
+         myCardTable.pnlHumanHand.add(humanLabels[i]);
+      }
+      
+      // add two random cards in the play region (player1 + cpu)
+      
+      Card playerCard = randomCardGenerator();
+      Card cpuCard = randomCardGenerator();
+      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(cpuCard)));
+      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(playerCard)));
+      myCardTable.pnlPlayArea.add(playLabelText[0]);             
+      myCardTable.pnlPlayArea.add(playLabelText[1]);
+            
+      
       // show everything to the user
       myCardTable.setVisible(true);
 
    }
 
+   //TODO: remove, this is test code
+   static Card randomCardGenerator() {
+      Random random = new Random();
+      char value = 'A';
+      Card.Suit suit = Card.Suit.spades;
+      
+      // random value
+      switch(random.nextInt(13)) {
+      case 0 : 
+         value = 'A';
+         break;
+      case 1 : 
+         value = '2';
+         break;
+      case 2 : 
+         value = '3';
+         break;
+      case 3 : 
+         value = '4';
+         break;
+      case 4 : 
+         value = '5';
+         break;
+      case 5 : 
+         value = '6';
+         break;
+      case 6 : 
+         value = '7';
+         break;
+      case 7 : 
+         value = '8';
+         break;
+      case 8 : 
+         value = '9';
+         break;
+      case 9 : 
+         value = 'T';     
+         break;
+      case 10 : 
+         value = 'J';
+         break;
+      case 11 : 
+         value = 'Q';
+         break;
+      case 12 : 
+         value = 'K';
+         break;
+      case 13 : 
+         value = 'X';
+         break;       
+      }
+      
+      // random suit
+      switch(random.nextInt(3)) {
+      case 0 :
+         suit = Card.Suit.clubs;
+         break;
+      case 1 : 
+         suit = Card.Suit.diamonds;
+         break;
+      case 2 :
+         suit = Card.Suit.hearts;
+         break;
+      case 3 : 
+         suit = Card.Suit.spades;
+         break;
+      }
+      
+      return new Card(value, suit);
+   }
 }
 
 class CardTable extends JFrame {
@@ -283,6 +361,10 @@ class Card
    private char value;
    private Suit suit;
    private boolean errorFlag;
+   
+   public static char[] valueRanks;
+   
+   
 
    /**
     * Card Constructor with no parameters
@@ -359,13 +441,44 @@ class Card
       return ((value >= '2' && value <= '9') || value == 'A' || value == 'K'
             || value == 'Q' || value == 'J' || value == 'T');
    }
-}
+
+   /**
+    * sorts arraySize using bubble sort method
+    * @param cards - array of cards to be sorted
+    * @param ararySize - length of the array being sorted?
+    */
+   static void arraySort(Card[] cards, int arraySize) {
+      
+      for(int i = 0; i < arraySize - 1; i++){
+         
+         for(int j = 0; i < arraySize - i - 1; j++) {
+            Card currentCard = cards[j];
+            Card nextCard = cards[j+1];            
+            
+            // if next card is lower, swap
+            if(Character
+                  .compare(currentCard.getValue(),
+                        nextCard.getValue()) > 1) {
+               // create a copy, reference will be overwritten
+               Card tempCard = 
+                     new Card(currentCard.getValue(), currentCard.getSuit());
+               currentCard = new Card(nextCard.getValue(), nextCard.getSuit());
+               nextCard = new Card(tempCard.getValue(), nextCard.getSuit());
+            }
+            
+         }// end inner j loop         
+         
+      }// end outer i loop
+      
+   }
+   
+}// end Card class
 
 // Phase 3: The Deck Class
 class Deck
-{
+{   
    public final int MAX_CARDS = 312;
-   private static Card[] masterPack = new Card[52];
+   private static Card[] masterPack = new Card[52 + 4]; // max deck + 4 jokers
    private Card[] cards;
    private int topCard;
 
@@ -519,12 +632,55 @@ class Deck
       masterPack[50] = new Card('2', Card.Suit.clubs);
       masterPack[51] = new Card('A', Card.Suit.clubs);
    }
-}
+
+   /**
+    * check if the card exists in the deck
+    * if possible, put the card on top of the deck
+    * return false if impossible or card exists
+    * @param card - card to be added to the deck
+    * @return - true if addCard was successful false otherwise
+    */
+   boolean addCard (Card card) {
+      return false;
+   }
+
+   /**
+    * remove a specific card from the deck
+    * put the current top card into its place
+    * return false if the card doesn't exist
+    * @param card - card to be removed
+    * @return - true if removed from the deck, flase otherwise
+    */
+   boolean removeCard(Card card) {
+      return false;
+   }
+   
+   /**
+    * put all the cards in the deck back into the right order according to value
+    * *???????????????? check if this function exists
+    */
+   void sort() {
+      
+   }
+   
+   /**
+    * return the number of cards remaining in the deck
+    * @return
+    */
+   int getNumCards() {
+      if(cards != null) {
+         return cards.length;   
+      }
+      
+      return 0;
+   }
+   
+}// end Deck Class
 
 class Hand
 {
    // max number of cards in a deck, 1 person hand
-   public static final int MAX_CARDS = 52;
+   public static final int MAX_CARDS = 52 + 4; // add 4 jokers
 
    Card[] myCards;
    int numCards; // this could be a function that returns myCards.length()
@@ -617,6 +773,32 @@ class Hand
 
       return playedCard;
    }
+   
+   /**
+    * Removes the card at index location and shifts cards down in the array
+    * @param cardIndex - index of the card to be played
+    * @return - the card that was played
+    */
+   public Card playCard(int cardIndex)
+   {
+      if ( numCards == 0 ) //error
+      {
+         //Creates a card that does not work
+         return new Card('M', Card.Suit.spades);
+      }
+      //Decreases numCards.
+      Card card = myCards[cardIndex];
+      
+      numCards--;
+      for(int i = cardIndex; i < numCards; i++)
+      {
+         myCards[i] = myCards[i+1];
+      }
+      
+      myCards[numCards] = null;
+      
+      return card;
+    }
 
    /**
     * returns all cards in the hand as a string
@@ -661,5 +843,12 @@ class Hand
       }
    }
 
+   /**
+    * sort the hand by calling arraySort() from Card class
+    */
+   void sort() {
+      
+   }
+   
 }// end Hand class
 
