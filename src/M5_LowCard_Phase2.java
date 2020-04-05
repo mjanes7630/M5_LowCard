@@ -29,11 +29,6 @@ public class M5_LowCard_Phase2 {
       CardTable myCardTable = new CardTable("CardTable", 
                                              NUM_CARDS_PER_HAND,
                                              NUM_PLAYERS);
-      // Test Print
-      CardTable marcosCardTable = new CardTable("CardTable", 
-            0,
-            NUM_PLAYERS);
-      System.out.println(marcosCardTable.getNumCardsPerHand());
       myCardTable.setSize(800, 600);
       myCardTable.setLocationRelativeTo(null);
       myCardTable.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,7 +76,7 @@ class CardTable extends JFrame {
       super(title);
       
       /*
-       * Filter input
+       * Filter inputs
        */
       if (numCardsPerHand < 1 || numCardsPerHand > MAX_CARDS_PER_HAND) {
          int randomInt = new Random().nextInt(MAX_CARDS_PER_HAND) + 1;
@@ -92,6 +87,37 @@ class CardTable extends JFrame {
          this.numCardsPerHand = numCardsPerHand;
       }
       
+      if (numPlayers < 2 || numPlayers > MAX_PLAYERS) {
+         /*
+          * We will assume the minimum amount of players is two but will not 
+          * assume the max players will always be two. Thus, we will set the
+          * filter to the minimum players of 2. JPanels will only display 2.
+          */
+         this.numPlayers = 2;
+      }
+      else {
+         this.numPlayers = numPlayers;
+      }
+      // Setup a border layout
+      setLayout(new BorderLayout());
+      /*
+       * Setup of the Public JPanels, give them a border with a title, then add
+       * them to their appropriate boarder location
+       */
+      // Top Computer Hand 
+      pnlComputerHand = new JPanel(new GridLayout(1,numCardsPerHand));
+      pnlComputerHand.setBorder(new TitledBorder("Computer Hand"));
+      add(pnlComputerHand, BorderLayout.NORTH);
+      
+      // Middle Playing Area
+      pnlPlayArea = new JPanel(new GridLayout(2,numPlayers));
+      pnlPlayArea.setBorder(new TitledBorder("Playing Area"));
+      add(pnlPlayArea, BorderLayout.CENTER);
+      
+      // Bottom Human Player Hand
+      pnlHumanHand = new JPanel(new GridLayout(1,numCardsPerHand));
+      pnlHumanHand.setBorder(new TitledBorder("Your Hand"));
+      add(pnlHumanHand, BorderLayout.SOUTH);
       
    }
 
@@ -99,7 +125,7 @@ class CardTable extends JFrame {
    /**
     * @return the number of cards per hand
     */
-   public int getNumCardsPerHand()
+   int getNumCardsPerHand()
    {
       return numCardsPerHand;
    }
@@ -107,8 +133,79 @@ class CardTable extends JFrame {
    /**
     * @return the number of players
     */
-   public int getNumPlayers()
+   int getNumPlayers()
    {
       return numPlayers;
    }
+}
+
+class GUICard {
+   private static Icon[][] iconCards = new ImageIcon[14][4];
+   private static Icon iconBack;
+   static boolean iconsLoaded = false;
+   
+   static void loadCardIcons() {
+      String imageDirectory = "images/";
+      String imageExtension =".gif";
+      
+      // Check to see if this has been done already
+      if(iconsLoaded) {
+         return;
+      }
+      
+      for(int suit = 0; suit < 4; suit++) {
+         for(int value = 0; value < 14; value++) {
+            String imageFile = imageDirectory.
+                  concat(turnIntIntoCardValue(value)).
+                  concat(turnIntIntoCardSuit(suit)).
+                  concat(imageExtension);
+            iconCards[value][suit] = new ImageIcon(imageFile);
+         }
+      }
+      
+      // Set a verification that this has been run
+      iconsLoaded = true;
+   }
+   
+   // turns 0 - 13 into "A", "2", "3", ... "Q", "K", "X"
+   static String turnIntIntoCardValue(int valueInt)
+   {
+      // Need to increment all values up by one
+      valueInt++;
+      switch(valueInt) {
+      case 1:
+         return "A";
+      case 10:
+         return "T";
+      case 11:
+         return "J";
+      case 12:
+         return "Q";
+      case 13:
+         return "K";
+      case 14:
+         return "X";
+      default:
+         return Integer.toString(valueInt);
+      }
+   }
+   
+   // turns 0 - 3 into "C", "D", "H", "S"
+   static String turnIntIntoCardSuit(int suitInt)
+   {
+      switch(suitInt)
+      {
+      case 0:
+         return "C";
+      case 1:
+         return "D";
+      case 2:
+         return "H";
+      case 3:
+         return "S";
+      default:
+         return null;
+      }
+   }
+   
 }
