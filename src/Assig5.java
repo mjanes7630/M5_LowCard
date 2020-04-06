@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
    
 public class Assig5 
@@ -84,22 +86,30 @@ public class Assig5
          return null;
       }
    }
- //TODO:Delete this code, i'm just trying to spin icons :)
+
+//Spins the icons in the icon[]
    static void iconSpin() 
    {
       int currentIconHeight = 0;
       int currentIconWidth = 0;
       int maxRow = 0;
       int rGB = 0;
+      
+      //iterates through every ImageIcon in icon[] 
       for(int i = NUM_CARD_IMAGES - 1; i >= 0; i--) 
       {
          currentIconHeight = icon[i].getIconHeight();
          currentIconWidth = icon[i].getIconWidth();
          maxRow = currentIconHeight;
-
-         BufferedImage tempImage = new BufferedImage(currentIconHeight, 
-               currentIconWidth, BufferedImage.TYPE_INT_RGB);
          
+         //builds a temp BufferedImage object with the dimensions of
+         //the targeted icon[i] turned 90 degrees
+         BufferedImage tempImage = new BufferedImage(currentIconHeight, 
+               currentIconWidth,
+               BufferedImage.TYPE_INT_RGB);
+         
+         //takes the current icon[i] and converts it into a BufferedImage
+         //this is done so each pixel can be accessed individually
          BufferedImage currentIcon = new BufferedImage(
                icon[i].getIconWidth(), icon[i].getIconHeight(),
                BufferedImage.TYPE_INT_RGB);
@@ -107,6 +117,9 @@ public class Assig5
          icon[i].paintIcon(null, g, 0, 0);
          g.dispose();
          
+         //iterates through each pixel in currentIcon
+         //takes the pixel at an (x,y) value for current Icon and stores it at
+         // (icon[i].getIconHeight(), x); essentially rotating the icon 90
          for(int y = 0; y < currentIconHeight; y++) {
             maxRow--;
             for(int x = 0; x < currentIconWidth; x++) 
@@ -126,11 +139,7 @@ public class Assig5
       
       // prepare the image icon array
       loadCardIcons();
-      iconSpin();
-      iconSpin();
-      iconSpin();
-      iconSpin();
-      
+
       // establish main frame in which program will run
       JFrame frmMyWindow = new JFrame("Card Room");
       frmMyWindow.setSize(1150, 650);
@@ -146,10 +155,37 @@ public class Assig5
       for (k = 0; k < NUM_CARD_IMAGES; k++)
          labels[k] = new JLabel(icon[k]);
       
+      // makes a Jbutton with an actionListener
+      JButton b = new JButton("Rotate Cards");
+      
+      //On button press it calls iconSpin() then repopulates the labels[] with
+      //the rotated icon[i]; then repaints the JFrame
+      b.addActionListener(new ActionListener() 
+      {
+         public void actionPerformed(ActionEvent e) 
+         {
+            iconSpin();      
+            
+            for(int j = 0; j < NUM_CARD_IMAGES; j++) 
+            {
+               frmMyWindow.remove(labels[j]);
+               labels[j] = new JLabel(icon[j]);
+               frmMyWindow.add(labels[j]);
+            }
+            frmMyWindow.repaint();
+            frmMyWindow.add(b);
+            frmMyWindow.setVisible(true);
+         } 
+      });
+
+      
       // place your 3 controls into frame
       for (k = 0; k < NUM_CARD_IMAGES; k++)
          frmMyWindow.add(labels[k]);
-
+     
+      //TODO:delete this
+      frmMyWindow.add(b);
+      
       // show everything to the user
       frmMyWindow.setVisible(true);
    }
