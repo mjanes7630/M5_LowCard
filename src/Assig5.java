@@ -85,27 +85,40 @@ public class Assig5
       }
    }
  //TODO:Delete this code, i'm just trying to spin icons :)
- /**
-   public void iconSpin() 
+   static void iconSpin() 
    {
       int currentIconHeight = 0;
       int currentIconWidth = 0;
+      int maxRow = 0;
+      int rGB = 0;
       for(int i = NUM_CARD_IMAGES - 1; i >= 0; i--) 
       {
          currentIconHeight = icon[i].getIconHeight();
          currentIconWidth = icon[i].getIconWidth();
+         maxRow = currentIconHeight;
+
          BufferedImage tempImage = new BufferedImage(currentIconHeight, 
                currentIconWidth, BufferedImage.TYPE_INT_RGB);
-         BufferedImage currentIcon = (BufferedImage)icon[i];
-         for(int x = 0; x < currentIconWidth; x++) 
-         {
-            for(int y = 0; y < currentIconHeight; y++) {
-               
+         
+         BufferedImage currentIcon = new BufferedImage(
+               icon[i].getIconWidth(), icon[i].getIconHeight(),
+               BufferedImage.TYPE_INT_RGB);
+         Graphics g = currentIcon.createGraphics();
+         icon[i].paintIcon(null, g, 0, 0);
+         g.dispose();
+         
+         for(int y = 0; y < currentIconHeight; y++) {
+            maxRow--;
+            for(int x = 0; x < currentIconWidth; x++) 
+            {
+               rGB = currentIcon.getRGB(x, y);
+               tempImage.setRGB(maxRow, x, rGB);
             }
-         }         
+         }
+         icon[i] = new ImageIcon(tempImage);                
       }
    }
-**/
+
    // a simple main to throw all the JLabels out there for the world to see
    public static void main(String[] args)
    {
@@ -113,6 +126,10 @@ public class Assig5
       
       // prepare the image icon array
       loadCardIcons();
+      iconSpin();
+      iconSpin();
+      iconSpin();
+      iconSpin();
       
       // establish main frame in which program will run
       JFrame frmMyWindow = new JFrame("Card Room");
