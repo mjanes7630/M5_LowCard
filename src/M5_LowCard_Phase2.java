@@ -25,7 +25,9 @@ public class M5_LowCard_Phase2 {
    
 
    public static void main(String[] args) {      
+      @SuppressWarnings("unused")
       int k;
+      @SuppressWarnings("unused")
       Icon tempIcon;
       // establish main frame in which program will run
       CardTable myCardTable = new CardTable("CardTable", 
@@ -137,6 +139,7 @@ public class M5_LowCard_Phase2 {
    }
 }
 
+@SuppressWarnings("serial")
 class CardTable extends JFrame {
    static int MAX_CARDS_PER_HAND = 56;
    static int MAX_PLAYERS = 2; 
