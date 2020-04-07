@@ -15,7 +15,8 @@ import javax.swing.border.*;
 import java.util.Random;
 
 
-abstract class M5_LowCard_Phase2 {
+public class Phase3
+{
    static int NUM_CARDS_PER_HAND = 7;
    static int NUM_PLAYERS = 2;
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
@@ -24,7 +25,27 @@ abstract class M5_LowCard_Phase2 {
    static JLabel[] playLabelText = new JLabel[NUM_PLAYERS];
    
 
-   public static void main(String[] args) {      
+   public static void main(String[] args)
+   {
+     
+      //
+      int numPacksPerDeck = 1;
+      int numJokersPerPack = 2;
+      int numUnusedCardsPerPack = 0;
+      Card[] unusedCardsPerPack = null;
+
+      CardGameFramework LowCardGame = new CardGameFramework( 
+            numPacksPerDeck, numJokersPerPack,  
+            numUnusedCardsPerPack, unusedCardsPerPack, 
+            NUM_PLAYERS, NUM_CARDS_PER_HAND);
+      //
+      
+      LowCardGame.deal();
+      
+      //
+      
+      
+      
       int k;
       Icon tempIcon;
       // establish main frame in which program will run
@@ -40,7 +61,7 @@ abstract class M5_LowCard_Phase2 {
       playLabelText[1] = new JLabel("Player 1", JLabel.CENTER);   
       
       for(int i = 0; i < NUM_CARDS_PER_HAND - 1; i ++) {
-         Card playerCard = randomCardGenerator();         
+         Card playerCard = LowCardGame.getCardFromDeck(); //randomCardGenerator();
                 
          computerLabels[i] = (new JLabel(GUICard.getBackCardIcon()));
          humanLabels[i] = (new JLabel(GUICard.getIcon(playerCard)));
@@ -52,10 +73,10 @@ abstract class M5_LowCard_Phase2 {
       
       // add two random cards in the play region (player1 + cpu)
       
-      Card playerCard = randomCardGenerator();
-      Card cpuCard = randomCardGenerator();
-      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(cpuCard)));
-      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(playerCard)));
+     // Card playerCard = randomCardGenerator();
+    //  Card cpuCard = randomCardGenerator();
+    //  myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(cpuCard)));
+    //  myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(playerCard)));
       myCardTable.pnlPlayArea.add(playLabelText[0]);             
       myCardTable.pnlPlayArea.add(playLabelText[1]);
             
@@ -63,10 +84,18 @@ abstract class M5_LowCard_Phase2 {
       // show everything to the user
       myCardTable.setVisible(true);
 
+   // "Low-Card" Game
+      
+      JLabel win = new JLabel("You Win!");
+      JLabel lose = new JLabel("You Lose");
+      
+      myCardTable.pnlPlayArea.add(win);
+      
    }
-
+   
    //TODO: remove, this is test code
-   static Card randomCardGenerator() {
+   static Card randomCardGenerator()
+   {
       Random random = new Random();
       char value = 'A';
       Card.Suit suit = Card.Suit.spades;
@@ -501,7 +530,7 @@ class Deck
    // Methods
    public void init(int numPacks)
    {
-      cards = new Card[numPacks * 52];
+      cards = new Card[numPacks * 56]; //Increased from 52
       int index = 0;
 
       while (numPacks > 0)
