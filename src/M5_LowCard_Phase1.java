@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
    
-public class Assig5 
+public class M5_LowCard_Phase1 
 {
    // static for the 57 icons and their corresponding labels
    // normally we would not have a separate label for each card, but
