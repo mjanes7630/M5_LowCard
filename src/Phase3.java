@@ -9,13 +9,18 @@
  */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
 import java.util.Random;
 
-
-abstract class M5_LowCard_Phase2 {
+public class Phase3
+{
    static int NUM_CARDS_PER_HAND = 7;
    static int NUM_PLAYERS = 2;
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
@@ -24,10 +29,28 @@ abstract class M5_LowCard_Phase2 {
    static JLabel[] playLabelText = new JLabel[NUM_PLAYERS];
    
 
-   public static void main(String[] args) {      
-      @SuppressWarnings("unused")
+   public static void main(String[] args)
+   {
+     
+      //
+     // int numPacksPerDeck = 1;
+     // int numJokersPerPack = 2;
+     // int numUnusedCardsPerPack = 0;
+     // Card[] unusedCardsPerPack = null;
+
+     // CardGameFramework LowCardGame = new CardGameFramework( 
+     //       numPacksPerDeck, numJokersPerPack,  
+     //       numUnusedCardsPerPack, unusedCardsPerPack, 
+     //       NUM_PLAYERS, NUM_CARDS_PER_HAND);
+      //
+      
+      //LowCardGame.deal();
+      
+      //
+      
+      
+      
       int k;
-      @SuppressWarnings("unused")
       Icon tempIcon;
       // establish main frame in which program will run
       CardTable myCardTable = new CardTable("CardTable", 
@@ -42,7 +65,7 @@ abstract class M5_LowCard_Phase2 {
       playLabelText[1] = new JLabel("Player 1", JLabel.CENTER);   
       
       for(int i = 0; i < NUM_CARDS_PER_HAND - 1; i ++) {
-         Card playerCard = randomCardGenerator();         
+         Card playerCard = randomCardGenerator();
                 
          computerLabels[i] = (new JLabel(GUICard.getBackCardIcon()));
          humanLabels[i] = (new JLabel(GUICard.getIcon(playerCard)));
@@ -56,19 +79,156 @@ abstract class M5_LowCard_Phase2 {
       
       Card playerCard = randomCardGenerator();
       Card cpuCard = randomCardGenerator();
-      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(cpuCard)));
+      
+         // Win and Lose Labels
+      JLabel win = new JLabel("You Win!", SwingConstants.CENTER);
+      win.setForeground(Color.GREEN);
+      win.setVisible(false);
+      
+      JLabel lose = new JLabel("You Lose.", SwingConstants.CENTER);
+      lose.setForeground(Color.RED);
+      lose.setVisible(false);
+         //
+      
+      myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(cpuCard)));      
+      myCardTable.pnlPlayArea.add(win);     
       myCardTable.pnlPlayArea.add(new JLabel(GUICard.getIcon(playerCard)));
-      myCardTable.pnlPlayArea.add(playLabelText[0]);             
-      myCardTable.pnlPlayArea.add(playLabelText[1]);
-            
+      myCardTable.pnlPlayArea.add(playLabelText[0]);      
+      myCardTable.pnlPlayArea.add(lose);    
+      myCardTable.pnlPlayArea.add(playLabelText[1]);       
       
       // show everything to the user
       myCardTable.setVisible(true);
 
-   }
+      // "Low-Card" The actual game portion     
+      KeyListener listener = new KeyListener()
+            {
+               @Override
+               public void keyTyped(KeyEvent e)
+               {
+                  // No code necessary.
+               }
 
+               @Override
+               public void keyPressed(KeyEvent e)
+               {
+                  // No code necessary or use in conjunction with keyReleased().
+               }
+
+               @Override
+               // Detects the key that is pressed.
+               public void keyReleased(KeyEvent e)
+               {
+                  switch (e.getKeyCode())
+                  {
+                     case KeyEvent.VK_1:
+                        // For testing only:
+                        // For some reason, this detects multiple presses. We
+                        // could go around this issue by handling how the
+                        // program reacts to the attempting the removal of a
+                        // card from of a hand that has already been removed.
+                        System.out.println("pressed "+ 1);
+                        
+                        // TODO:
+                        // Place the players leftmost card into the center,
+                        // then remove it from the player's Hand.
+                        break;
+                        
+                     case KeyEvent.VK_2:
+                        break;
+                        
+                     case KeyEvent.VK_3:
+                        break;
+                        
+                     case KeyEvent.VK_4:
+                        break;
+                        
+                     case KeyEvent.VK_5:
+                        break;
+                     case KeyEvent.VK_6:
+                        break;
+                        
+                     case KeyEvent.VK_7:
+                        break;
+                  }
+                  
+               }
+         
+            };
+     
+      boolean turnKeeper; // true = player has gone, false = CPU has gone
+          
+      if ( coinFlip() )
+      {
+         // Players Turn
+         System.out.println("Player's Turn");
+         myCardTable.addKeyListener(listener);
+         turnKeeper = true;
+      }
+      else
+      {
+         // CPUs turn
+         turnKeeper = false; // The CPU has not gone
+         cpuTurn( turnKeeper );                
+      }
+      
+      
+      do
+      {
+         if( turnKeeper )
+         {
+            // CPUs turn
+            turnKeeper = false;
+            cpuTurn( turnKeeper );
+         }
+         else
+         {
+            // Players turn
+            turnKeeper = true;
+            myCardTable.addKeyListener( listener );
+         }
+      }
+      while ();// TODO: Do while there are still cards in hands
+            
+   }
+   
+   public static boolean coinFlip() {
+      Random rand = new Random();
+      
+      return rand.nextBoolean();
+   }
+   
+   public static void cpuTurn( boolean cardHasBeenPlayed ) {
+      System.out.println("Computer's Turn");
+      
+      if ( cardHasBeenPlayed )
+      {
+         //TODO: compare my hand to his card and play the largest card CPU can
+         // play and still win.
+      }
+      else
+      {
+         //TODO:
+         // Coders choice:
+         // play the smallest card in the CPUs hand for a better chance to win.
+         // Or the largest, to save the smaller cards for later.
+      }
+      return;
+   }
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
    //TODO: remove, this is test code
-   static Card randomCardGenerator() {
+   static Card randomCardGenerator()
+   {
       Random random = new Random();
       char value = 'A';
       Card.Suit suit = Card.Suit.spades;
@@ -137,9 +297,12 @@ abstract class M5_LowCard_Phase2 {
       
       return new Card(value, suit);
    }
+
+   
+
+   
 }
 
-@SuppressWarnings("serial")
 class CardTable extends JFrame {
    static int MAX_CARDS_PER_HAND = 56;
    static int MAX_PLAYERS = 2; 
@@ -504,7 +667,7 @@ class Deck
    // Methods
    public void init(int numPacks)
    {
-      cards = new Card[numPacks * 52];
+      cards = new Card[numPacks * 56]; //Increased from 52
       int index = 0;
 
       while (numPacks > 0)

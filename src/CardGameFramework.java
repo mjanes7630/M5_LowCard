@@ -1,6 +1,6 @@
 //class CardGameFramework  ----------------------------------------------------
 class CardGameFramework
-{
+{   
    private static final int MAX_PLAYERS = 50;
 
    private int numPlayers;
@@ -62,6 +62,7 @@ class CardGameFramework
    {
       this(1, 0, 0, null, 4, 13);
    }
+   
 
    public Hand getHand(int k)
    {
